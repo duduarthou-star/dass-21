@@ -1,10 +1,36 @@
-<div class="container">
-  <h1>DASS-21</h1>
-  <p>Selecione a frequência de cada afirmação.</p>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Questionário de Autoavaliação (DASS-21)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-  <form id="form"></form>
+  <main class="container">
+    <header>
+      <h1>Questionário de Autoavaliação</h1>
+      <p>Por favor, leia cada afirmação e selecione a opção que indica o quanto ela se aplicou a você durante a última semana.</p>
+    </header>
 
-  <button id="btn">Calcular Resultado</button>
+    <form id="dassForm">
+      <div id="questionsContainer"></div>
+      
+      <button type="submit" class="btn-submit">Ver Resultado</button>
+    </form>
 
-  <div id="resultado"></div>
-</div>
+    <div id="result" class="result-box hidden">
+      <h2>Resultado da Avaliação</h2>
+      <div class="score-card">
+        <p><strong>Depressão:</strong> <span id="depressionScore">0</span> pontos</p>
+        <p><strong>Ansiedade:</strong> <span id="anxietyScore">0</span> pontos</p>
+        <p><strong>Estresse:</strong> <span id="stressScore">0</span> pontos</p>
+      </div>
+      <p class="disclaimer"><em>Nota: Este questionário é uma ferramenta de autoavaliação e não substitui um diagnóstico profissional realizado por um psicólogo ou psiquiatra.</em></p>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
