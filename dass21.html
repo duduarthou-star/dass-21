@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DASS-21</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f4f4f4;max-width:900px;margin:auto;padding:20px}
+.card{background:#fff;padding:15px;margin:12px 0;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+button{padding:12px 20px;border:none;border-radius:8px;background:#2563eb;color:#fff;font-size:16px;cursor:pointer}
+#resultado{display:none;background:#eef8ee;padding:15px;border-radius:10px;margin-top:20px}
+</style></head><body>
+<h1>DASS-21</h1><form id="f"></form>
+<p><button type="button" onclick="calc()">Calcular</button>
+<button type="reset">Limpar</button>
+<button type="button" onclick="window.print()">Imprimir / Salvar PDF</button></p>
+<div id="resultado"></div>
+<script>
+const qs=[
+"Tive dificuldade em me acalmar/descomprimir.","Dei-me conta que tinha a boca seca.","Não consegui ter nenhum sentimento positivo.","Senti dificuldade em respirar.","Foi-me difícil tomar iniciativa para fazer coisas.","Tive tendência para reagir exageradamente.","Senti tremores.","Senti-me muito nervoso(a).","Preocupei-me com situações em que poderia sentir pânico.","Senti que não havia nada que me fizesse andar para a frente.","Senti que estava agitado(a).","Senti dificuldades em relaxar.","Senti-me triste e deprimido(a).","Fui intolerante quando qualquer coisa me impedia de realizar o que estava a fazer.","Estive perto de entrar em pânico.","Não me consegui entusiasmar com nada.","Senti que não valia muito como pessoa.","Senti que andava muito irritável.","Senti o bater do coração mesmo sem esforço.","Tive medo sem boa razão.","Senti que a vida não tinha nenhum sentido."
+];
+const ops=["Nunca","Às vezes","Frequentemente","Quase sempre"];
+const f=document.getElementById("f");
+qs.forEach((q,i)=>{let d=document.createElement("div");d.className="card";d.innerHTML="<b>"+(i+1)+". "+q+"</b><br>";
+ops.forEach((o,v)=>d.innerHTML+=`<label><input type="radio" name="q${i}" value="${v}"> ${o}</label><br>`);
+f.appendChild(d);});
+const dep=[2,4,9,12,15,16,20],ans=[1,3,6,8,14,18,19],est=[0,5,7,10,11,13,17];
+function sev(type,s){const t={dep:[[9,"Normal"],[13,"Leve"],[20,"Moderada"],[27,"Grave"],[99,"Extremamente grave"]],ans:[[7,"Normal"],[9,"Leve"],[14,"Moderada"],[19,"Grave"],[99,"Extremamente grave"]],est:[[14,"Normal"],[18,"Leve"],[25,"Moderada"],[33,"Grave"],[99,"Extremamente grave"]]};for(const [m,l] of t[type])if(s<=m)return l;}
+function calc(){let r=[];for(let i=0;i<21;i++){let x=document.querySelector('input[name=q'+i+']:checked');if(!x){alert("Responda todas.");return;}r.push(+x.value);}
+const sum=a=>a.reduce((z,i)=>z+r[i],0)*2;let d=sum(dep),a=sum(ans),e=sum(est);
+let out=document.getElementById("resultado");out.style.display="block";
+out.innerHTML=`<h2>Resultado</h2><p>Depressão: <b>${d}</b> (${sev("dep",d)})</p><p>Ansiedade: <b>${a}</b> (${sev("ans",a)})</p><p>Estresse: <b>${e}</b> (${sev("est",e)})</p><p><small>Instrumento de rastreamento, não substitui avaliação profissional.</small></p>`;
+}
+</script></body></html>
