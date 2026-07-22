@@ -3,8 +3,143 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Questionário de Autoavaliação (DASS-21)</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Questionário DASS-21</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f4f7f6;
+      color: #333;
+      line-height: 1.6;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    header {
+      margin-bottom: 25px;
+      text-align: center;
+    }
+
+    header h1 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      color: #666;
+      font-size: 0.95rem;
+    }
+
+    .question-card {
+      background: #fafafa;
+      border: 1px solid #e2e8f0;
+      padding: 18px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .question-text {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 12px;
+    }
+
+    .options-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .option-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #fff;
+      border: 1px solid #cbd5e0;
+      padding: 8px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .option-label:hover {
+      background: #edf2f7;
+      border-color: #a0aec0;
+    }
+
+    .option-label input[type="radio"] {
+      accent-color: #3182ce;
+    }
+
+    .btn-submit {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background-color: #3182ce;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      margin-top: 20px;
+    }
+
+    .btn-submit:hover {
+      background-color: #2b6cb0;
+    }
+
+    .result-box {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 8px;
+      background: #ebf8ff;
+      border: 1px solid #bee3f8;
+      text-align: center;
+    }
+
+    .result-box.hidden {
+      display: none;
+    }
+
+    .score-card {
+      display: flex;
+      justify-content: space-around;
+      margin: 15px 0;
+      font-size: 1.1rem;
+    }
+
+    .disclaimer {
+      font-size: 0.85rem;
+      color: #718096;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .options-group {
+        flex-direction: column;
+      }
+      .score-card {
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -16,7 +151,6 @@
 
     <form id="dassForm">
       <div id="questionsContainer"></div>
-      
       <button type="submit" class="btn-submit">Ver Resultado</button>
     </form>
 
@@ -31,6 +165,95 @@
     </div>
   </main>
 
-  <script src="script.js"></script>
+  <script>
+    const questions = [
+      { id: 1, text: "Tive dificuldade em me acalmar/descomprimir.", scale: "E" },
+      { id: 2, text: "Dei-me conta que tinha a boca seca.", scale: "A" },
+      { id: 3, text: "Não consegui ter nenhum sentimento positivo.", scale: "D" },
+      { id: 4, text: "Senti dificuldade em respirar (por exemplo, respiração excessivamente rápida ou falta de ar na ausência de esforço físico).", scale: "A" },
+      { id: 5, text: "Foi-me difícil tomar iniciativa para fazer coisas.", scale: "D" },
+      { id: 6, text: "Tive tendência para reagir exageradamente em certas situações.", scale: "E" },
+      { id: 7, text: "Senti tremores (por exemplo, das mãos ou das pernas).", scale: "A" },
+      { id: 8, text: "Senti-me muito nervoso(a).", scale: "A" },
+      { id: 9, text: "Preocupei-me com situações em que poderia vir a sentir pânico e fazer um papel ridículo.", scale: "A" },
+      { id: 10, text: "Senti que não havia nada que me fizesse andar para a frente (ter expectativas positivas).", scale: "D" },
+      { id: 11, text: "Senti que estava agitado(a).", scale: "E" },
+      { id: 12, text: "Senti dificuldades em relaxar.", scale: "E" },
+      { id: 13, text: "Senti-me triste e deprimido(a).", scale: "D" },
+      { id: 14, text: "Fui intolerante quando qualquer coisa me impedia de realizar o que estava a fazer.", scale: "E" },
+      { id: 15, text: "Estive perto de entrar em pânico.", scale: "A" },
+      { id: 16, text: "Não me consegui entusiasmar com nada.", scale: "D" },
+      { id: 17, text: "Senti que não valia muito como pessoa.", scale: "D" },
+      { id: 18, text: "Senti que andava muito irritável.", scale: "E" },
+      { id: 19, text: "Senti o bater do meu coração mesmo quando não fazia esforço físico (ex.: sensação de aumento dos batimentos ou falhas no coração).", scale: "A" },
+      { id: 20, text: "Tive medo sem uma boa razão para isso.", scale: "A" },
+      { id: 21, text: "Senti que a vida não tinha nenhum sentido.", scale: "D" }
+    ];
+
+    const options = [
+      { label: "Nunca", value: 0 },
+      { label: "Às vezes", value: 1 },
+      { label: "Frequentemente", value: 2 },
+      { label: "Quase sempre", value: 3 }
+    ];
+
+    function renderQuestions() {
+      const container = document.getElementById("questionsContainer");
+
+      questions.forEach((q) => {
+        const card = document.createElement("div");
+        card.className = "question-card";
+
+        const title = document.createElement("p");
+        title.className = "question-text";
+        title.textContent = `${q.id}. ${q.text}`;
+        card.appendChild(title);
+
+        const optionsGroup = document.createElement("div");
+        optionsGroup.className = "options-group";
+
+        options.forEach((opt) => {
+          const label = document.createElement("label");
+          label.className = "option-label";
+
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = `q_${q.id}`;
+          input.value = opt.value;
+          input.required = true;
+
+          label.appendChild(input);
+          label.appendChild(document.createTextNode(opt.label));
+          optionsGroup.appendChild(label);
+        });
+
+        card.appendChild(optionsGroup);
+        container.appendChild(card);
+      });
+    }
+
+    document.getElementById("dassForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      let scores = { D: 0, A: 0, E: 0 };
+
+      questions.forEach((q) => {
+        const selectedOption = document.querySelector(`input[name="q_${q.id}"]:checked`);
+        if (selectedOption) {
+          scores[q.scale] += parseInt(selectedOption.value, 10);
+        }
+      });
+
+      document.getElementById("depressionScore").textContent = scores.D * 2;
+      document.getElementById("anxietyScore").textContent = scores.A * 2;
+      document.getElementById("stressScore").textContent = scores.E * 2;
+
+      const resultBox = document.getElementById("result");
+      resultBox.classList.remove("hidden");
+      resultBox.scrollIntoView({ behavior: "smooth" });
+    });
+
+    document.addEventListener("DOMContentLoaded", renderQuestions);
+  </script>
 </body>
 </html>
